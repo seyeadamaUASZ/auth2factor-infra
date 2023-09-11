@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth2factor-deployment
+spec:
+  selector:
+    matchLabels:
+      app: auth2factor
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: auth2factor
+    spec:
+      containers:
+        - name: auth2factor
+          image: adama93/auth2factor
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9090
+          env:   # Setting Enviornmental Variables
+            - name: DB_HOST   # Setting Database host address from configMap
+              value: mysql
+            - name: DB_NAME  # Setting Database name from configMap
+              value: db_auth
+            - name: DB_USERNAME  # Setting Database username from Secret
+              value: root
+            - name: DB_PASSWORD # Setting Database password from Secret
+              value: root
